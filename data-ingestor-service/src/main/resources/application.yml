@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: data-ingestor-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username:
+    password:
+
+# Finnhub WebSocket API configuration
+finnhub:
+  api-key: ""
+  websocket-url: "wss://ws.finnhub.io?token=${finnhub.api-key}"
+
+# App-specific configuration
+app:
+  rabbitmq:
+    exchange-name: "price.events.topic"
+  # Symbols to subscribe to on startup
+  stocks:
+    - "AAPL"
+    - "MSFT"
+    - "AMZN"
+    - "BINANCE:BTCUSDT"
