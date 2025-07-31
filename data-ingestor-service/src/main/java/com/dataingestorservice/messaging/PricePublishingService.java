@@ -19,10 +19,10 @@ public class PricePublishingService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void publishPriceUpdate(PriceUpdate.TradeData tradeData) {
-        String routingKey = createRoutingKey(tradeData.symbol());
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, tradeData);
-        log.info("Published to exchange '{}' with routing key '{}': {}", exchangeName, routingKey, tradeData);
+    public void publishPriceUpdate(PriceUpdate priceUpdate) {
+        String routingKey = createRoutingKey(priceUpdate.symbol());
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, priceUpdate);
+        log.info("Published to exchange '{}' with routing key '{}': {}", exchangeName, routingKey, priceUpdate);
     }
 
     private String createRoutingKey(String symbol) {

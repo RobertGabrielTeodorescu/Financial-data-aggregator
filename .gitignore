@@ -18,17 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+/.idea/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
-/src/main/resources/config/secrets.yml
+/data-ingestor-service/src/main/resources/config/secrets.yml

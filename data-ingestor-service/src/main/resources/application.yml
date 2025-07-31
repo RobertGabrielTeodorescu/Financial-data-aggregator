@@ -1,16 +1,16 @@
 spring:
+  config:
+    import: optional:config/secrets.yml
   application:
     name: data-ingestor-service
   rabbitmq:
     host: localhost
     port: 5672
-    username:
-    password:
 
-# Finnhub WebSocket API configuration
-finnhub:
-  api-key: ""
-  websocket-url: "wss://ws.finnhub.io?token=${finnhub.api-key}"
+# Alpaca WebSocket API configuration
+alpaca:
+  # Use paper-trading sandbox URL for stocks
+  websocket-url: "wss://stream.data.alpaca.markets/v2/iex"
 
 # App-specific configuration
 app:
@@ -21,4 +21,3 @@ app:
     - "AAPL"
     - "MSFT"
     - "AMZN"
-    - "BINANCE:BTCUSDT"
