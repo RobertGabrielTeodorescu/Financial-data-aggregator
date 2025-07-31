@@ -1,16 +1,14 @@
 spring:
+  config:
+    import: optional:config/secrets.yml
   application:
     name: data-ingestor-service
   rabbitmq:
     host: localhost
     port: 5672
-    username: user
-    password: password
 
 # Alpaca WebSocket API configuration
 alpaca:
-  api-key-id: "PKZ1PZ2I11XJVI39QKEI"
-  secret-key: "wJImfliRw8HaDRYsaZ05b2hNh9I2i6lKdh65IefW"
   # Use paper-trading sandbox URL for stocks
   websocket-url: "wss://stream.data.alpaca.markets/v2/iex"
 
