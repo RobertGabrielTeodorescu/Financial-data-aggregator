@@ -1,7 +1,8 @@
 package com.dataingestorservice.config;
 
 import com.dataingestorservice.messaging.PricePublishingService;
-import com.dataingestorservice.websocket.FinnHubClientEndpoint;
+import com.dataingestorservice.websocket.AlpacaAuthRequest;
+import com.dataingestorservice.websocket.AlpacaClientEndpoint;
 import com.dataingestorservice.websocket.SubscriptionRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.websocket.ContainerProvider;
@@ -17,6 +18,8 @@ import org.springframework.context.event.EventListener;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @ConfigurationProperties(prefix = "app")
@@ -25,8 +28,14 @@ public class WebSocketConfig {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${finnhub.websocket-url}")
+    @Value("${alpaca.websocket-url}")
     private String webSocketUrl;
+
+    @Value("${alpaca.api-key-id}")
+    private String apiKeyId;
+
+    @Value("${alpaca.secret-key}")
+    private String secretKey;
 
     @Setter
     private List<String> stocks;
@@ -40,18 +49,37 @@ public class WebSocketConfig {
     @EventListener(ApplicationReadyEvent.class)
     public void connectToWebsocket() {
         try {
+            // 1. Create the latch
+            CountDownLatch authLatch = new CountDownLatch(1);
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            FinnHubClientEndpoint endpoint = new FinnHubClientEndpoint(pricePublishingService);
+
+            // 2. Pass the latch to the endpoint
+            AlpacaClientEndpoint endpoint = new AlpacaClientEndpoint(pricePublishingService, authLatch);
+            log.info("Connecting to Alpaca at: {}", webSocketUrl);
             Session session = container.connectToServer(endpoint, new URI(webSocketUrl));
-            for (String stock : stocks) {
-                SubscriptionRequest subscriptionRequest = new SubscriptionRequest("subscribe", stock);
-                String subscriptionMessage = objectMapper.writeValueAsString(subscriptionRequest);
-                session.getBasicRemote().sendText(subscriptionMessage);
-                log.info("Subscribed to websocket for subscription: {}", subscriptionMessage);
+
+            // 3. Send auth message
+            AlpacaAuthRequest authRequest = new AlpacaAuthRequest("auth", apiKeyId, secretKey);
+            String authMessage = objectMapper.writeValueAsString(authRequest);
+            session.getBasicRemote().sendText(authMessage);
+            log.info("Sent authentication request to Alpaca. Waiting for confirmation...");
+
+            // 4. Wait for the latch to be opened (with a timeout)
+            boolean authenticated = authLatch.await(10, TimeUnit.SECONDS);
+
+            if (authenticated) {
+                log.info("Authentication confirmed. Proceeding with subscription.");
+                // 5. Send subscription message
+                SubscriptionRequest subRequest = new SubscriptionRequest("subscribe", stocks, stocks);
+                String subMessage = objectMapper.writeValueAsString(subRequest);
+                session.getBasicRemote().sendText(subMessage);
+                log.info("Sent subscription request for trades and quotes for: {}", stocks);
+            } else {
+                log.error("Authentication timed out. Closing session.");
+                session.close();
             }
         } catch (Exception e) {
-            log.error("WebSocket error for websocket: {}", webSocketUrl, e);
+            log.error("WebSocket connection to Alpaca failed", e);
         }
     }
-
 }

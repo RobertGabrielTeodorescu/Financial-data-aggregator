@@ -4,13 +4,15 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username:
-    password:
+    username: user
+    password: password
 
-# Finnhub WebSocket API configuration
-finnhub:
-  api-key: ""
-  websocket-url: "wss://ws.finnhub.io?token=${finnhub.api-key}"
+# Alpaca WebSocket API configuration
+alpaca:
+  api-key-id: "PKZ1PZ2I11XJVI39QKEI"
+  secret-key: "wJImfliRw8HaDRYsaZ05b2hNh9I2i6lKdh65IefW"
+  # Use paper-trading sandbox URL for stocks
+  websocket-url: "wss://stream.data.alpaca.markets/v2/iex"
 
 # App-specific configuration
 app:
@@ -21,4 +23,3 @@ app:
     - "AAPL"
     - "MSFT"
     - "AMZN"
-    - "BINANCE:BTCUSDT"

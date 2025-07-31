@@ -1,4 +1,6 @@
 package com.dataingestorservice.websocket;
 
-public record SubscriptionRequest(String type, String symbol) {
+import java.util.List;
+
+public record SubscriptionRequest(String action, List<String> trades, List<String> quotes) {
 }
