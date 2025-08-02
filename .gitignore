@@ -22,3 +22,5 @@ target/
 
 
 /data-ingestor-service/src/main/resources/config/secrets.yml
+/.claude/
+/alert-processor-service/src/main/resources/config/secrets.yml

@@ -8,8 +8,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties
 public class DataIngestorApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(DataIngestorApplication.class, args);
+
+        // This line will block the main thread, keeping the application alive
+        // so the WebSocket's background threads can continue listening for messages.
+        Thread.currentThread().join();
     }
 
 }

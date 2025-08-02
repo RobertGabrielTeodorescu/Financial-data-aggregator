@@ -1,21 +1,16 @@
 spring:
-  config:
-    import: optional:config/secrets.yml
+  profiles:
+    include: common
   application:
     name: data-ingestor-service
-  rabbitmq:
-    host: localhost
-    port: 5672
 
 # Alpaca WebSocket API configuration
 alpaca:
   # Use paper-trading sandbox URL for stocks
   websocket-url: "wss://stream.data.alpaca.markets/v2/iex"
 
-# App-specific configuration
+# Service-specific configuration
 app:
-  rabbitmq:
-    exchange-name: "price.events.topic"
   # Symbols to subscribe to on startup
   stocks:
     - "AAPL"

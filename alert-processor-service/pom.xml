@@ -9,9 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     
-    <artifactId>data-ingestor-service</artifactId>
-    <name>Data-Ingestor-Service</name>
-    <description>Service for ingesting real-time financial data from external APIs</description>
+    <artifactId>alert-processor-service</artifactId>
+    <name>Alert-processor-service</name>
+    <description>Service to process price events and manage alerts</description>
     <dependencies>
         <!-- Common module -->
         <dependency>
@@ -21,27 +21,19 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
-        <!-- WebSocket client dependencies -->
+        
         <dependency>
-            <groupId>jakarta.websocket</groupId>
-            <artifactId>jakarta.websocket-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.tyrus.bundles</groupId>
-            <artifactId>tyrus-standalone-client</artifactId>
-            <version>2.1.5</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -52,5 +44,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

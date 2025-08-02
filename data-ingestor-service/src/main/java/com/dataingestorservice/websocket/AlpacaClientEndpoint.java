@@ -1,10 +1,11 @@
 package com.dataingestorservice.websocket;
 
-import com.dataingestorservice.messaging.PricePublishingService;
-import com.dataingestorservice.messaging.model.PriceUpdate;
+import com.dataingestorservice.messaging.UpdatePublishingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.findataagg.common.messaging.model.PriceUpdate;
+import com.findataagg.common.messaging.model.QuoteUpdate;
 import jakarta.websocket.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +16,10 @@ import java.util.concurrent.CountDownLatch;
 public class AlpacaClientEndpoint {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final PricePublishingService publishingService;
+    private final UpdatePublishingService publishingService;
     private final CountDownLatch authLatch;
 
-    public AlpacaClientEndpoint(PricePublishingService publishingService, CountDownLatch authLatch) {
+    public AlpacaClientEndpoint(UpdatePublishingService publishingService, CountDownLatch authLatch) {
         this.publishingService = publishingService;
         this.authLatch = authLatch;
     }
@@ -58,8 +59,12 @@ public class AlpacaClientEndpoint {
                 log.info("Alpaca subscription confirmation: {}", node);
                 break;
             case "t":
-                PriceUpdate update = objectMapper.treeToValue(node, PriceUpdate.class);
-                publishingService.publishPriceUpdate(update);
+                PriceUpdate priceUpdate = objectMapper.treeToValue(node, PriceUpdate.class);
+                publishingService.publishUpdate(priceUpdate);
+                break;
+            case "q":
+                QuoteUpdate quoteUpdate = objectMapper.treeToValue(node, QuoteUpdate.class);
+                publishingService.publishUpdate(quoteUpdate);
                 break;
             default:
                 log.warn("Received unhandled Alpaca message type '{}'", messageType);

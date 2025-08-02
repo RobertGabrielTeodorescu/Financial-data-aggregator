@@ -1,19 +1,14 @@
 package com.dataingestorservice.config;
 
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import com.findataagg.common.messaging.config.BaseRabbitMQConfig;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * RabbitMQ configuration for data-ingestor-service.
+ * Extends the base configuration to inherit common exchange setup.
+ */
 @Configuration
-public class RabbitMQConfig {
-
-    @Value("${app.rabbitmq.exchange-name}")
-    private String exchangeName;
-
-    @Bean
-    public TopicExchange priceEventsTopicExchange() {
-        return new TopicExchange(exchangeName);
-    }
-
+public class RabbitMQConfig extends BaseRabbitMQConfig {
+    // Inherits the priceEventsTopicExchange bean from BaseRabbitMQConfig
+    // Service-specific queues and bindings can be added here if needed
 }
