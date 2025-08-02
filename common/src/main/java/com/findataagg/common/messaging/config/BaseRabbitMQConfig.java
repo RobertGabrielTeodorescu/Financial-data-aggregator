@@ -2,6 +2,8 @@ package com.findataagg.common.messaging.config;
 
 import com.findataagg.common.constants.RabbitMQConstants;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,26 +28,16 @@ public class BaseRabbitMQConfig {
     }
 
     /**
-     * Utility method to create routing keys for stock symbols
-     */
-    public static String createStockRoutingKey(String symbol) {
-        return RabbitMQConstants.RoutingKeys.STOCK_PREFIX + symbol.toLowerCase();
-    }
-
-    /**
-     * Utility method to create routing keys for crypto symbols
-     */
-    public static String createCryptoRoutingKey(String symbol) {
-        String simplifiedSymbol = symbol.toLowerCase().replace(":", ".");
-        return RabbitMQConstants.RoutingKeys.CRYPTO_PREFIX + simplifiedSymbol;
-    }
-
-    /**
      * Utility method to determine routing key based on symbol
      */
-    public static String createRoutingKey(String symbol) {
+    public static String createRoutingKey(String type, String symbol) {
         String simplifiedSymbol = symbol.toLowerCase().replace(":", ".");
-        String type = simplifiedSymbol.contains("binance") ? "crypto" : "stock";
-        return String.format("price.%s.%s", type, simplifiedSymbol);
+        String assetType = simplifiedSymbol.contains("binance") ? "crypto" : "stock";
+        return String.format("%s.%s.%s", type, assetType, simplifiedSymbol);
+    }
+
+    @Bean
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
 }

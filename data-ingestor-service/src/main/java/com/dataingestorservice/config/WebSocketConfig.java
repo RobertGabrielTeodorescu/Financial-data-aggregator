@@ -1,6 +1,6 @@
 package com.dataingestorservice.config;
 
-import com.dataingestorservice.messaging.PricePublishingService;
+import com.dataingestorservice.messaging.UpdatePublishingService;
 import com.dataingestorservice.websocket.AlpacaAuthRequest;
 import com.dataingestorservice.websocket.AlpacaClientEndpoint;
 import com.dataingestorservice.websocket.SubscriptionRequest;
@@ -40,10 +40,10 @@ public class WebSocketConfig {
     @Setter
     private List<String> stocks;
 
-    private final PricePublishingService pricePublishingService;
+    private final UpdatePublishingService updatePublishingService;
 
-    public WebSocketConfig(PricePublishingService pricePublishingService) {
-        this.pricePublishingService = pricePublishingService;
+    public WebSocketConfig(UpdatePublishingService updatePublishingService) {
+        this.updatePublishingService = updatePublishingService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -54,7 +54,7 @@ public class WebSocketConfig {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
             // 2. Pass the latch to the endpoint
-            AlpacaClientEndpoint endpoint = new AlpacaClientEndpoint(pricePublishingService, authLatch);
+            AlpacaClientEndpoint endpoint = new AlpacaClientEndpoint(updatePublishingService, authLatch);
             log.info("Connecting to Alpaca at: {}", webSocketUrl);
             Session session = container.connectToServer(endpoint, new URI(webSocketUrl));
 

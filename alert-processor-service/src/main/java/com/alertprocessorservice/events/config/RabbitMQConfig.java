@@ -5,6 +5,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,20 +13,40 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig extends BaseRabbitMQConfig {
 
-    @Value("${app.rabbitmq.queue-name}")
-    private String queueName;
+    @Value("${app.rabbitmq.trades-queue-name}")
+    private String tradesQueueName;
 
-    @Value("${app.rabbitmq.routing-key}")
-    private String routingKey;
+    @Value("${app.rabbitmq.quotes-queue-name}")
+    private String quotesQueueName;
+
+    @Value("${app.rabbitmq.trades-routing-key}")
+    private String tradesRoutingKey;
+
+    @Value("${app.rabbitmq.quotes-routing-key}")
+    private String quotesRoutingKey;
 
     @Bean
     public Queue stockPriceQueue() {
-        return new Queue(queueName, true); // durable=true
+        return new Queue(tradesQueueName, true);
     }
 
     @Bean
-    public Binding stockPriceBinding(Queue stockPriceQueue, TopicExchange priceEventsTopicExchange) {
-        return BindingBuilder.bind(stockPriceQueue)
+    public Queue stockQuoteQueue() {
+        return new Queue(quotesQueueName, true);
+    }
+
+    @Bean
+    public Binding stockPriceBinding(@Qualifier("stockPriceQueue") Queue stockPriceQueue, TopicExchange priceEventsTopicExchange) {
+        return createBindingHelper(stockPriceQueue, priceEventsTopicExchange, tradesRoutingKey);
+    }
+
+    @Bean
+    public Binding stockQuoteBinding(@Qualifier("stockQuoteQueue") Queue stockQuoteQueue, TopicExchange priceEventsTopicExchange) {
+        return createBindingHelper(stockQuoteQueue, priceEventsTopicExchange, quotesRoutingKey);
+    }
+
+    private Binding createBindingHelper(Queue queue, TopicExchange priceEventsTopicExchange, String routingKey) {
+        return BindingBuilder.bind(queue)
                 .to(priceEventsTopicExchange)
                 .with(routingKey);
     }

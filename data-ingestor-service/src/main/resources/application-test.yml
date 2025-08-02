@@ -1,0 +1,17 @@
+# Properties in this file are ONLY active when the 'test' profile is running.
+# It will override any properties from the main application.yml.
+
+alpaca:
+  # Use Alpaca's dedicated test stream URL
+  websocket-url: "wss://stream.data.alpaca.markets/v2/test"
+
+app:
+  # Subscribe to the special 'FAKEPACA' symbol for a constant stream of test data
+  stocks:
+    - "FAKEPACA"
+
+logging:
+  level:
+    com.dataingestorservice: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - [PROFILE: %-7.7spring.profiles.active] %msg%n"
