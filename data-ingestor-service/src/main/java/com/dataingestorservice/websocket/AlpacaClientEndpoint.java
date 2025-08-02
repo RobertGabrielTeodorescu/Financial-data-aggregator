@@ -1,10 +1,10 @@
 package com.dataingestorservice.websocket;
 
 import com.dataingestorservice.messaging.PricePublishingService;
-import com.dataingestorservice.messaging.model.PriceUpdate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.findataagg.common.messaging.model.PriceUpdate;
 import jakarta.websocket.*;
 import lombok.extern.slf4j.Slf4j;
 

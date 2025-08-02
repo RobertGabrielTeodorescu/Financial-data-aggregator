@@ -11,6 +11,18 @@ services:
       - RABBITMQ_DEFAULT_PASS=password
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: alert_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   rabbitmq_data:
+  postgres_data:

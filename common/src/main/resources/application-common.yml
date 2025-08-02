@@ -1,0 +1,20 @@
+# Common configuration shared across all financial data aggregator services
+# This file contains shared Spring and RabbitMQ configurations
+
+spring:
+  config:
+    import: optional:config/secrets.yml
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+# Shared RabbitMQ configuration
+app:
+  rabbitmq:
+    exchange-name: "price.events.topic"
+
+# Logging configuration
+logging:
+  level:
+    com.findataagg: INFO
+    org.springframework.amqp: WARN

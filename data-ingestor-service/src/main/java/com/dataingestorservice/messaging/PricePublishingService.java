@@ -1,6 +1,7 @@
 package com.dataingestorservice.messaging;
 
-import com.dataingestorservice.messaging.model.PriceUpdate;
+import com.findataagg.common.messaging.model.PriceUpdate;
+import com.findataagg.common.messaging.config.BaseRabbitMQConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,6 @@ public class PricePublishingService {
     }
 
     private String createRoutingKey(String symbol) {
-        String simplifiedSymbol = symbol.toLowerCase().replace(":", ".");
-        String type = simplifiedSymbol.contains("binance") ? "crypto" : "stock";
-        return String.format("price.%s.%s", type, simplifiedSymbol);
+        return BaseRabbitMQConfig.createRoutingKey(symbol);
     }
 }
