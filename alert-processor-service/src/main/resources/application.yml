@@ -3,9 +3,14 @@ spring:
     include: common
   application:
     name: alert-processor-service
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
   # Database configuration
   datasource:
     url: jdbc:postgresql://localhost:5432/alert_db
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD}
   # JPA/Hibernate configuration
   jpa:
     hibernate:

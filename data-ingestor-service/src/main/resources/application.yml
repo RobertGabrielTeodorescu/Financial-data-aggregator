@@ -3,11 +3,16 @@ spring:
     include: common
   application:
     name: data-ingestor-service
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 # Alpaca WebSocket API configuration
 alpaca:
   # Use paper-trading sandbox URL for stocks
   websocket-url: "wss://stream.data.alpaca.markets/v2/iex"
+  api-key-id: ${ALPACA_API_KEY_ID}
+  secret-key: ${ALPACA_SECRET_KEY}
 
 # Service-specific configuration
 app:
