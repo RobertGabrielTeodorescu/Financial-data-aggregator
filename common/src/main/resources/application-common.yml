@@ -2,8 +2,6 @@
 # This file contains shared Spring and RabbitMQ configurations
 
 spring:
-  config:
-    import: optional:config/secrets.yml
   rabbitmq:
     host: localhost
     port: 5672
