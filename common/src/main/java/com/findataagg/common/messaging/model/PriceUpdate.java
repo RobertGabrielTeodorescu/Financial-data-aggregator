@@ -17,6 +17,6 @@ public record PriceUpdate(@JsonProperty("S") String symbol,
     
     @Override
     public String type() {
-        return "price";
+        return "trade";
     }
 }
