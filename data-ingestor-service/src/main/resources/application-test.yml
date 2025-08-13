@@ -12,6 +12,6 @@ app:
 
 logging:
   level:
-    com.dataingestorservice: INFO
+    com.findataagg.dataingestorservice: INFO
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - [PROFILE: %-7.7spring.profiles.active] %msg%n"
