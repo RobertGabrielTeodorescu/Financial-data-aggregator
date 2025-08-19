@@ -2,7 +2,6 @@ package com.findataagg.alertprocessorservice.persistence.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,10 +10,10 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
+import static com.findataagg.alertprocessorservice.persistence.constants.TableConstants.TRADES_TABLE;
+
 @Entity
-@Table(name = "trades", indexes = {
-        @Index(name = "idx_trade_symbol_timestamp", columnList = "symbol, timestamp DESC")
-})
+@Table(name = TRADES_TABLE)
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder

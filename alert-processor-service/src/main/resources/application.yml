@@ -14,8 +14,17 @@ spring:
   # JPA/Hibernate configuration
   jpa:
     hibernate:
-      ddl-auto: update # Automatically update the DB schema on startup
+      ddl-auto: validate # Automatically update the DB schema on startup
     show-sql: false # Log SQL statements for debugging
+  # Flyway configuration
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
   amqp:
     deserialization:
       trust:
@@ -29,3 +38,8 @@ app:
     quotes-queue-name: "stock.quote.queue"
     trades-routing-key: "trade.stock.#"
     quotes-routing-key: "quote.stock.#"
+  # Partition management configuration
+  partitioning:
+    enabled: true
+    retention-months: 24
+    auto-cleanup: true

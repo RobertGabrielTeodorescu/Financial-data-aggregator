@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+import static com.findataagg.alertprocessorservice.persistence.constants.TableConstants.ALERT_RULES_TABLE;
+
 @Entity
-@Table(name = "alert_rules", indexes = {
-        @Index(name = "idx_alertrule_symbol", columnList = "symbol")
-})
+@Table(name = ALERT_RULES_TABLE)
 @Data
 @NoArgsConstructor
 public class AlertRule {
