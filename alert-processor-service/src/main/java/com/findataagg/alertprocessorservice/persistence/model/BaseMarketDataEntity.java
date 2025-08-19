@@ -14,12 +14,9 @@ import java.time.Instant;
 public abstract class BaseMarketDataEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    private Instant timestamp;
 
     @Column(nullable = false, length = 32)
     private String symbol;
-
-    @Column(nullable = false)
-    private Instant timestamp;
 }
