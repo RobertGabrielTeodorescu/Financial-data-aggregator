@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    include: common
+  application:
+    name: notification-service
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+  # Spring Mail configuration
+  mail:
+    host: smtp.gmail.com # Example for Gmail
+    port: 587
+    username: ${EMAIL_USERNAME} # Your email address
+    password: ${EMAIL_APP_PASSWORD} # Use an App Password, not your regular password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# Service-specific RabbitMQ configuration
+app:
+  rabbitmq:
+    alerts-queue-name: "alerts.triggered.queue"
+    alerts-routing-key: "alert.triggered.#"
