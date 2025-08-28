@@ -22,6 +22,7 @@
         <module>common</module>
         <module>data-ingestor-service</module>
         <module>alert-processor-service</module>
+        <module>notification-service</module>
     </modules>
 
     <dependencyManagement>
@@ -33,7 +34,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
+
             <!-- Common module -->
             <dependency>
                 <groupId>com.findataagg</groupId>
