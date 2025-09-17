@@ -1,6 +1,6 @@
 package com.findataagg.alertprocessorservice.alert.service;
 
-import com.findataagg.alertprocessorservice.alert.model.AlertRule;
+import com.findataagg.alert.model.AlertRule;
 import com.findataagg.common.messaging.model.PriceUpdate;
 import org.springframework.stereotype.Service;
 

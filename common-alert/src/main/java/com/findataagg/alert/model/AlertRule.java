@@ -1,4 +1,4 @@
-package com.findataagg.alertprocessorservice.alert.model;
+package com.findataagg.alert.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-import static com.findataagg.alertprocessorservice.persistence.constants.TableConstants.ALERT_RULES_TABLE;
+import static com.findataagg.alert.constants.AlertTableConstants.ALERT_RULES_TABLE;
 
 @Entity
 @Table(name = ALERT_RULES_TABLE)
@@ -32,4 +32,7 @@ public class AlertRule {
     private boolean enabled = true;
 
     private String notes;
+
+    @Column(nullable = false)
+    private Long userId;
 }

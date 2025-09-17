@@ -1,7 +1,7 @@
 package com.findataagg.alertprocessorservice.alert.service;
 
-import com.findataagg.alertprocessorservice.alert.model.AlertRule;
-import com.findataagg.alertprocessorservice.alert.repository.AlertRuleRepository;
+import com.findataagg.alert.model.AlertRule;
+import com.findataagg.alert.repository.AlertRuleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

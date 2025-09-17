@@ -11,18 +11,20 @@
     <description>Parent POM for Financial Data Aggregator microservices</description>
 
     <properties>
-        <java.version>21</java.version>
-        <spring-boot.version>3.5.4</spring-boot.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>24</java.version>
+        <spring-boot.version>3.5.5</spring-boot.version>
+        <maven.compiler.source>24</maven.compiler.source>
+        <maven.compiler.target>24</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <modules>
         <module>common</module>
+        <module>common-alert</module>
         <module>data-ingestor-service</module>
         <module>alert-processor-service</module>
         <module>notification-service</module>
+        <module>alert-config-service</module>
     </modules>
 
     <dependencyManagement>
@@ -39,6 +41,13 @@
             <dependency>
                 <groupId>com.findataagg</groupId>
                 <artifactId>common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Common Alert module -->
+            <dependency>
+                <groupId>com.findataagg</groupId>
+                <artifactId>common-alert</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
