@@ -1,6 +1,6 @@
 package com.findataagg.alertprocessorservice.events;
 
-import com.findataagg.alertprocessorservice.alert.model.AlertRule;
+import com.findataagg.alert.model.AlertRule;
 import com.findataagg.alertprocessorservice.alert.service.AlertEvaluationService;
 import com.findataagg.alertprocessorservice.alert.service.AlertRuleService;
 import com.findataagg.alertprocessorservice.persistence.model.Quote;

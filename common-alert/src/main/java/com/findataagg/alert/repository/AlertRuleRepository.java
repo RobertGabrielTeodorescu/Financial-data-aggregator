@@ -1,6 +1,6 @@
-package com.findataagg.alertprocessorservice.alert.repository;
+package com.findataagg.alert.repository;
 
-import com.findataagg.alertprocessorservice.alert.model.AlertRule;
+import com.findataagg.alert.model.AlertRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +17,8 @@ public interface AlertRuleRepository extends JpaRepository<AlertRule, Long> {
      * @return A list of active alert rules.
      */
     List<AlertRule> findBySymbolAndEnabled(String symbol, boolean enabled);
+
+    // Find all rules for a specific user
+    List<AlertRule> findByUserId(Long userId);
 
 }

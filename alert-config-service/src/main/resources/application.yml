@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    include: common
+  application:
+    name: alert-config-service
+  # Database configuration (points to the same DB as the processor)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/alert_db
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD}
+  # JPA/Hibernate configuration
+  jpa:
+    hibernate:
+      # Use 'none' as Flyway in the other service manages the schema
+      ddl-auto: none
+    show-sql: false
+
+server:
+  port: 8081 # Run on a different port than other services
