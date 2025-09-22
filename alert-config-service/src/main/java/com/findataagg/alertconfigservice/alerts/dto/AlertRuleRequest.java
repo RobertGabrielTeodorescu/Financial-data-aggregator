@@ -1,4 +1,4 @@
-package com.findataagg.alertconfigservice.dto;
+package com.findataagg.alertconfigservice.alerts.dto;
 
 import com.findataagg.alert.model.ConditionType;
 
