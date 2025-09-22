@@ -15,5 +15,16 @@ spring:
       ddl-auto: none
     show-sql: false
 
+application:
+  security:
+    jwt:
+      # IMPORTANT: Generate a strong, random, Base64 secret key for production.
+      secret-key: ${JWT_SECRET_KEY}
+      # Access token expiration in milliseconds (15 minutes for better security)
+      expiration: 900000
+      refresh-token:
+        # Refresh token expiration in milliseconds (7 days)
+        expiration: 604800000
+
 server:
   port: 8081 # Run on a different port than other services
