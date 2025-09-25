@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.findataagg</groupId>
+        <artifactId>financial-data-aggregator-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>alert-platform</artifactId>
+    <packaging>pom</packaging>
+    <name>Alert Platform</name>
+    <description>Alert platform containing all alert-related modules and services</description>
+
+    <modules>
+        <module>alert-domain</module>
+        <module>alert-config-service</module>
+        <module>alert-processor-service</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Alert Domain module -->
+            <dependency>
+                <groupId>com.findataagg</groupId>
+                <artifactId>alert-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
