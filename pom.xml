@@ -19,12 +19,10 @@
     </properties>
 
     <modules>
-        <module>common</module>
-        <module>common-alert</module>
+        <module>shared-platform</module>
+        <module>alert-platform</module>
         <module>data-ingestor-service</module>
-        <module>alert-processor-service</module>
         <module>notification-service</module>
-        <module>alert-config-service</module>
     </modules>
 
     <dependencyManagement>
@@ -37,17 +35,17 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Common module -->
+            <!-- Shared Platform module -->
             <dependency>
                 <groupId>com.findataagg</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>shared-platform</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- Common Alert module -->
+            <!-- Alert Domain module -->
             <dependency>
                 <groupId>com.findataagg</groupId>
-                <artifactId>common-alert</artifactId>
+                <artifactId>alert-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

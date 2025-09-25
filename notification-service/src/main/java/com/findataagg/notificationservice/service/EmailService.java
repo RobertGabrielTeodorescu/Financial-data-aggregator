@@ -24,7 +24,7 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmailAddress); // Set the from address
-            message.setTo("recipient-email@example.com"); // Hardcoded for now, will come from User entity later
+            message.setTo(event.userEmail());
             message.setSubject(String.format("Stock Alert Triggered for %s!", event.symbol()));
 
             String text = String.format(
