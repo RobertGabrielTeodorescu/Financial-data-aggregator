@@ -3,9 +3,6 @@ spring:
     include: common
   application:
     name: alert-processor-service
-  rabbitmq:
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
   # Database configuration
   datasource:
     url: jdbc:postgresql://localhost:5432/alert_db
@@ -43,3 +40,6 @@ app:
     enabled: true
     retention-months: 24
     auto-cleanup: true
+  # Alert configuration
+  alerts:
+    fallback-email: ${SYSTEM_ALERT_EMAIL:system-alerts@findataagg.com}

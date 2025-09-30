@@ -31,6 +31,10 @@ public class AlertRule {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private AlertStatus status = AlertStatus.PENDING;
+
     private String notes;
 
     @Column(nullable = false)

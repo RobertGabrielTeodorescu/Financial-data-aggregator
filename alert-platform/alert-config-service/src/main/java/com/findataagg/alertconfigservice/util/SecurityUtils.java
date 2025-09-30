@@ -30,16 +30,4 @@ public class SecurityUtils {
 
         throw new IllegalStateException("Invalid authentication principal type");
     }
-
-    /**
-     * Checks if there is a currently authenticated user.
-     *
-     * @return true if a user is authenticated, false otherwise
-     */
-    public static boolean isAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-               authentication.isAuthenticated() &&
-               !(authentication.getPrincipal() instanceof String); // Exclude "anonymousUser"
-    }
 }

@@ -3,9 +3,6 @@ spring:
     include: common
   application:
     name: notification-service
-  rabbitmq:
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
   # Spring Mail configuration
   mail:
     host: smtp.gmail.com # Example for Gmail

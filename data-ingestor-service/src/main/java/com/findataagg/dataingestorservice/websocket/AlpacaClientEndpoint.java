@@ -76,4 +76,9 @@ public class AlpacaClientEndpoint {
         log.error("WebSocket error for session: {}", session.getId(), throwable);
     }
 
+    @OnClose
+    public void onClose(Session session, CloseReason closeReason) {
+        log.info("WebSocket connection closed: {} - {}", closeReason.getCloseCode(), closeReason.getReasonPhrase());
+    }
+
 }

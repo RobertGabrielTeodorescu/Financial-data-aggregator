@@ -1,6 +1,7 @@
 package com.findataagg.alertprocessorservice.events;
 
 import com.findataagg.alert.model.AlertRule;
+import com.findataagg.alert.model.AlertStatus;
 import com.findataagg.alertprocessorservice.alert.service.AlertEvaluationService;
 import com.findataagg.alertprocessorservice.alert.service.AlertRuleService;
 import com.findataagg.alertprocessorservice.persistence.model.Quote;
@@ -13,9 +14,11 @@ import com.findataagg.common.messaging.model.QuoteUpdate;
 import com.findataagg.common.messaging.service.UpdatePublishingService;
 import com.findataagg.common.model.User;
 import com.findataagg.alert.repository.UserRepository;
+import com.findataagg.alert.repository.AlertRuleRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -31,14 +34,19 @@ public class PriceListenerService {
     private final AlertEvaluationService alertEvaluationService;
     private final UpdatePublishingService updatePublishingService;
     private final UserRepository userRepository;
+    private final AlertRuleRepository alertRuleRepository;
 
-    public PriceListenerService(QuoteRepository quoteRepository, TradeRepository tradeRepository, AlertRuleService alertRuleService, AlertEvaluationService alertEvaluationService, UpdatePublishingService updatePublishingService, UserRepository userRepository) {
+    @Value("${app.alerts.fallback-email:system-alerts@findataagg.com}")
+    private String fallbackEmail;
+
+    public PriceListenerService(QuoteRepository quoteRepository, TradeRepository tradeRepository, AlertRuleService alertRuleService, AlertEvaluationService alertEvaluationService, UpdatePublishingService updatePublishingService, UserRepository userRepository, AlertRuleRepository alertRuleRepository) {
         this.quoteRepository = quoteRepository;
         this.tradeRepository = tradeRepository;
         this.alertRuleService = alertRuleService;
         this.alertEvaluationService = alertEvaluationService;
         this.updatePublishingService = updatePublishingService;
         this.userRepository = userRepository;
+        this.alertRuleRepository = alertRuleRepository;
     }
 
     @RabbitListener(queues = "${app.rabbitmq.trades-queue-name}")
@@ -60,9 +68,13 @@ public class PriceListenerService {
                 log.warn("!!! ALERT TRIGGERED !!! Rule ID: {}, Symbol: {}, Condition: {} {}",
                         rule.getId(), rule.getSymbol(), rule.getConditionType(), rule.getValue());
 
+                // Mark alert as FIRED to prevent re-triggering on subsequent trades
+                rule.setStatus(AlertStatus.FIRED);
+                alertRuleRepository.save(rule);
+
                 String userEmail = userRepository.findById(rule.getUserId())
                         .map(User::getEmail)
-                        .orElse("unknown@example.com");
+                        .orElse(fallbackEmail);
 
                 AlertTriggeredEvent event = new AlertTriggeredEvent(rule.getId(), userEmail, rule.getSymbol(), rule.getConditionType().toString(), rule.getValue(), priceUpdate.price(), rule.getNotes());
                 updatePublishingService.publishUpdate(event);

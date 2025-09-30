@@ -17,11 +17,6 @@ public final class TableConstants {
     public static final String QUOTES_TABLE = "quotes";
 
     /**
-     * Alert system tables
-     */
-    public static final String ALERT_RULES_TABLE = "alert_rules";
-
-    /**
      * Array of all partitioned table names for iteration
      */
     public static final String[] PARTITIONED_TABLES = {

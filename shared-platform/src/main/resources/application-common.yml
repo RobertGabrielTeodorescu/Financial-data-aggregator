@@ -5,6 +5,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 # Shared RabbitMQ configuration
 app:
