@@ -1,6 +1,5 @@
 package com.findataagg.common.messaging.config;
 
-import com.findataagg.common.constants.RabbitMQConstants;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -15,7 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BaseRabbitMQConfig {
 
-    @Value("${app.rabbitmq.exchange-name:" + RabbitMQConstants.DEFAULT_EXCHANGE_NAME + "}")
+    private static final String DEFAULT_EXCHANGE_NAME = "price.events.topic";
+
+    @Value("${app.rabbitmq.exchange-name:" + DEFAULT_EXCHANGE_NAME + "}")
     private String exchangeName;
 
     /**

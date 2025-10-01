@@ -1,6 +1,7 @@
 package com.findataagg.alertconfigservice.alerts.service;
 
 import com.findataagg.alert.model.AlertRule;
+import com.findataagg.alert.model.AlertStatus;
 import com.findataagg.alert.repository.AlertRuleRepository;
 import com.findataagg.alertconfigservice.alerts.dto.AlertRuleRequest;
 import com.findataagg.common.model.User;
@@ -35,6 +36,7 @@ public class AlertConfigService {
         newRule.setValue(request.value());
         newRule.setNotes(request.notes());
         newRule.setEnabled(true);
+        newRule.setStatus(AlertStatus.PENDING);  // Set initial status to PENDING
 
         return alertRuleRepository.save(newRule);
     }

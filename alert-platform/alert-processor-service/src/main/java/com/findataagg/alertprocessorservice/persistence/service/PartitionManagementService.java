@@ -137,7 +137,7 @@ public class PartitionManagementService {
                 log.error("Failed to drop partition {}: {}", partitionName, e.getMessage());
             }
 
-            partitionMonth = partitionMonth.minusMonths(1);
+            partitionMonth = partitionMonth.plusMonths(1);
         }
     }
 
