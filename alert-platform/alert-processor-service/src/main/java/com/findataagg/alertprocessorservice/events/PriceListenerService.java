@@ -4,6 +4,7 @@ import com.findataagg.alert.model.AlertRule;
 import com.findataagg.alert.model.AlertStatus;
 import com.findataagg.alertprocessorservice.alert.service.AlertEvaluationService;
 import com.findataagg.alertprocessorservice.alert.service.AlertRuleService;
+import com.findataagg.alertprocessorservice.persistence.model.MarketDataId;
 import com.findataagg.alertprocessorservice.persistence.model.Quote;
 import com.findataagg.alertprocessorservice.persistence.model.Trade;
 import com.findataagg.alertprocessorservice.persistence.repository.QuoteRepository;
@@ -53,10 +54,12 @@ public class PriceListenerService {
     @Transactional
     public void handleTradeUpdate(PriceUpdate priceUpdate) {
         log.info("Received TRADE update from queue: {}", priceUpdate);
+        Instant timestamp = Instant.parse(priceUpdate.timestamp());
+        MarketDataId id = new MarketDataId(null, timestamp);
         Trade trade = Trade.builder()
+                .id(id)
                 .symbol(priceUpdate.symbol())
                 .price(priceUpdate.price())
-                .timestamp(Instant.parse(priceUpdate.timestamp()))
                 .size(priceUpdate.size())
                 .build();
         tradeRepository.save(trade);
@@ -85,13 +88,15 @@ public class PriceListenerService {
     @RabbitListener(queues = "${app.rabbitmq.quotes-queue-name}")
     public void handleQuoteUpdate(QuoteUpdate quoteUpdate) {
         log.info("Received QUOTE update from queue: {}", quoteUpdate);
+        Instant timestamp = Instant.parse(quoteUpdate.timestamp());
+        MarketDataId id = new MarketDataId(null, timestamp);
         Quote quote = Quote.builder()
+                .id(id)
                 .symbol(quoteUpdate.symbol())
                 .askSize(quoteUpdate.askSize())
                 .askPrice(quoteUpdate.askPrice())
                 .bidPrice(quoteUpdate.bidPrice())
                 .bidSize(quoteUpdate.bidSize())
-                .timestamp(Instant.parse(quoteUpdate.timestamp()))
                 .build();
         quoteRepository.save(quote);
     }
