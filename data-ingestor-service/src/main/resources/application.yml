@@ -18,3 +18,19 @@ app:
     - "AAPL"
     - "MSFT"
     - "AMZN"
+
+  # WebSocket connection and reconnection settings
+  websocket:
+    # Authentication timeout in seconds
+    auth-timeout-seconds: 10
+
+    # Reconnection configuration with exponential backoff
+    reconnect:
+      # Maximum number of reconnection attempts before giving up
+      max-retries: 10
+      # Initial backoff delay in milliseconds (doubles with each retry)
+      initial-backoff-ms: 1000
+      # Maximum backoff delay cap in milliseconds (5 minutes)
+      max-backoff-ms: 300000
+      # Jitter percentage (0-1) to add randomness and prevent thundering herd
+      jitter-percentage: 0.1

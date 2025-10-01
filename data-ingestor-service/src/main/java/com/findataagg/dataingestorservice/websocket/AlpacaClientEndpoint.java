@@ -1,11 +1,11 @@
 package com.findataagg.dataingestorservice.websocket;
 
-import com.findataagg.common.messaging.service.UpdatePublishingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findataagg.common.messaging.model.PriceUpdate;
 import com.findataagg.common.messaging.model.QuoteUpdate;
+import com.findataagg.common.messaging.service.UpdatePublishingService;
 import jakarta.websocket.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,10 +18,14 @@ public class AlpacaClientEndpoint {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final UpdatePublishingService publishingService;
     private final CountDownLatch authLatch;
+    private final WebSocketReconnectionManager reconnectionManager;
 
-    public AlpacaClientEndpoint(UpdatePublishingService publishingService, CountDownLatch authLatch) {
+    public AlpacaClientEndpoint(UpdatePublishingService publishingService,
+                                CountDownLatch authLatch,
+                                WebSocketReconnectionManager reconnectionManager) {
         this.publishingService = publishingService;
         this.authLatch = authLatch;
+        this.reconnectionManager = reconnectionManager;
     }
 
     @OnOpen
@@ -74,11 +78,17 @@ public class AlpacaClientEndpoint {
     @OnError
     public void onError(Session session, Throwable throwable) {
         log.error("WebSocket error for session: {}", session.getId(), throwable);
+        reconnectionManager.scheduleReconnect("WebSocket error: " + throwable.getMessage());
     }
 
     @OnClose
-    public void onClose(Session session, CloseReason closeReason) {
-        log.info("WebSocket connection closed: {} - {}", closeReason.getCloseCode(), closeReason.getReasonPhrase());
+    public void onClose(CloseReason closeReason) {
+        log.warn("WebSocket connection closed: {} - {}",
+                closeReason.getCloseCode(), closeReason.getReasonPhrase());
+        reconnectionManager.scheduleReconnect(
+                String.format("Connection closed: %s - %s",
+                        closeReason.getCloseCode(), closeReason.getReasonPhrase())
+        );
     }
 
 }
