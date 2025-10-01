@@ -5,17 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.io.Serializable;
 
 @MappedSuperclass
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public abstract class BaseMarketDataEntity {
+public abstract class BaseMarketDataEntity implements Serializable {
 
-    @Id
-    @Column(nullable = false)
-    private Instant timestamp;
+    @EmbeddedId
+    private MarketDataId id;
 
     @Column(nullable = false, length = 32)
     private String symbol;
