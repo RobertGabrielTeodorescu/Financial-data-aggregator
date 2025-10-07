@@ -25,6 +25,12 @@ public class RabbitMQConfig {
     @Value("${app.rabbitmq.quotes-routing-key}")
     private String quotesRoutingKey;
 
+    @Value("${app.rabbitmq.cache-invalidation-queue-name}")
+    private String cacheInvalidationQueueName;
+
+    @Value("${app.rabbitmq.cache-invalidation-routing-key}")
+    private String cacheInvalidationRoutingKey;
+
     @Bean
     public Queue stockPriceQueue() {
         return new Queue(tradesQueueName, true);
@@ -36,6 +42,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue cacheInvalidationQueue() {
+        return new Queue(cacheInvalidationQueueName, true);
+    }
+
+    @Bean
     public Binding stockPriceBinding(@Qualifier("stockPriceQueue") Queue stockPriceQueue, @Qualifier("priceEventsTopicExchange") TopicExchange priceEventsTopicExchange) {
         return createBindingHelper(stockPriceQueue, priceEventsTopicExchange, tradesRoutingKey);
     }
@@ -43,6 +54,11 @@ public class RabbitMQConfig {
     @Bean
     public Binding stockQuoteBinding(@Qualifier("stockQuoteQueue") Queue stockQuoteQueue, @Qualifier("priceEventsTopicExchange") TopicExchange priceEventsTopicExchange) {
         return createBindingHelper(stockQuoteQueue, priceEventsTopicExchange, quotesRoutingKey);
+    }
+
+    @Bean
+    public Binding cacheInvalidationBinding(@Qualifier("cacheInvalidationQueue") Queue cacheInvalidationQueue, @Qualifier("priceEventsTopicExchange") TopicExchange priceEventsTopicExchange) {
+        return createBindingHelper(cacheInvalidationQueue, priceEventsTopicExchange, cacheInvalidationRoutingKey);
     }
 
     private Binding createBindingHelper(Queue queue, TopicExchange priceEventsTopicExchange, String routingKey) {

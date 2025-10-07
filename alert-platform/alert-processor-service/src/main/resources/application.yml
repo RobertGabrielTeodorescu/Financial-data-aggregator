@@ -35,6 +35,8 @@ app:
     quotes-queue-name: "stock.quote.queue"
     trades-routing-key: "trade.stock.#"
     quotes-routing-key: "quote.stock.#"
+    cache-invalidation-queue-name: "cache.invalidation.queue"
+    cache-invalidation-routing-key: "cache.invalidation.#"
   # Partition management configuration
   partitioning:
     enabled: true
