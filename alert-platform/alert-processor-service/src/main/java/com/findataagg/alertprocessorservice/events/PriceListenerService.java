@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -67,21 +70,32 @@ public class PriceListenerService {
         List<AlertRule> activeRules = alertRuleService.findActiveRulesBySymbol(priceUpdate.symbol());
         if (!activeRules.isEmpty()) {
             List<AlertRule> triggeredRules = alertEvaluationService.evaluate(priceUpdate, activeRules);
-            triggeredRules.forEach(rule -> {
-                log.warn("!!! ALERT TRIGGERED !!! Rule ID: {}, Symbol: {}, Condition: {} {}",
-                        rule.getId(), rule.getSymbol(), rule.getConditionType(), rule.getValue());
 
-                // Mark alert as FIRED to prevent re-triggering on subsequent trades
-                rule.setStatus(AlertStatus.FIRED);
-                alertRuleRepository.save(rule);
+            if (!triggeredRules.isEmpty()) {
+                // Batch fetch all user emails in a single query to avoid N+1 problem
+                Set<Long> userIds = triggeredRules.stream()
+                        .map(AlertRule::getUserId)
+                        .collect(Collectors.toSet());
 
-                String userEmail = userRepository.findById(rule.getUserId())
-                        .map(User::getEmail)
-                        .orElse(fallbackEmail);
+                Map<Long, String> userEmailMap = userRepository.findAllById(userIds)
+                        .stream()
+                        .collect(Collectors.toMap(User::getId, User::getEmail));
 
-                AlertTriggeredEvent event = new AlertTriggeredEvent(rule.getId(), userEmail, rule.getSymbol(), rule.getConditionType().toString(), rule.getValue(), priceUpdate.price(), rule.getNotes());
-                updatePublishingService.publishUpdate(event);
-            });
+                triggeredRules.forEach(rule -> {
+                    log.warn("!!! ALERT TRIGGERED !!! Rule ID: {}, Symbol: {}, Condition: {} {}",
+                            rule.getId(), rule.getSymbol(), rule.getConditionType(), rule.getValue());
+
+                    // Mark alert as FIRED to prevent re-triggering on subsequent trades
+                    rule.setStatus(AlertStatus.FIRED);
+                    alertRuleRepository.save(rule);
+
+                    // Get user email from batch-fetched map (single query instead of N queries)
+                    String userEmail = userEmailMap.getOrDefault(rule.getUserId(), fallbackEmail);
+
+                    AlertTriggeredEvent event = new AlertTriggeredEvent(rule.getId(), userEmail, rule.getSymbol(), rule.getConditionType().toString(), rule.getValue(), priceUpdate.price(), rule.getNotes());
+                    updatePublishingService.publishUpdate(event);
+                });
+            }
         }
     }
 
