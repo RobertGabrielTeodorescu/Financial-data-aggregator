@@ -95,6 +95,9 @@ public class PriceListenerService {
                     AlertTriggeredEvent event = new AlertTriggeredEvent(rule.getId(), userEmail, rule.getSymbol(), rule.getConditionType().toString(), rule.getValue(), priceUpdate.price(), rule.getNotes());
                     updatePublishingService.publishUpdate(event);
                 });
+
+                // Evict cache for this symbol after all alerts processed (only once, not per alert)
+                alertRuleService.evictCacheForSymbol(priceUpdate.symbol());
             }
         }
     }
